@@ -7,6 +7,8 @@ import { getPineconeClient } from "@/lib/pinecone-client";
 // creation and try again.
 (async () => {
   try {
+    console.log("start==>");
+
     const pineconeClient = await getPineconeClient();
     console.log("Preparing chunks from PDF file");
     const docs = await getChunkedDocsFromPDF();
