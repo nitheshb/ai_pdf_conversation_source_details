@@ -1,4 +1,6 @@
-import { ChatOpenAI } from "langchain/chat_models/openai";
+// import { ChatOpenAI } from "langchain/chat_models/openai";
+
+import { ChatOpenAI } from "@langchain/openai";
 
 export const streamingModel = new ChatOpenAI({
   modelName: "gpt-3.5-turbo",

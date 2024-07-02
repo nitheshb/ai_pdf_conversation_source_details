@@ -1,8 +1,9 @@
 import { env } from './config';
 // import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 // import { PineconeStore } from 'langchain/vectorstores/pinecone';
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { OpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
+// import { VectorStoreRetriever } from "langchain/vectorstores/base";
 // import { PineconeClient } from '@pinecone-database/pinecone';
 import { Pinecone } from "@pinecone-database/pinecone";
 
@@ -38,10 +39,29 @@ export async function getVectorStore(client: Pinecone) {
       pineconeIndex: index,
       textKey: 'text',
     });
-
+    
     return vectorStore;
   } catch (error) {
     console.log('error ', error);
     throw new Error('Something went wrong while getting vector store !');
+  }
+}
+
+export async function getRetriever(client: Pinecone) {
+  try {
+    const embeddings = new OpenAIEmbeddings();
+    const index = client.Index(env.PINECONE_INDEX_NAME);
+
+    const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+      pineconeIndex: index,
+      textKey: 'text',
+    });
+
+    const retriever = vectorStore.asRetriever();
+    return retriever;
+
+  } catch (error) {
+    console.log('error ', error);
+    throw new Error('Something went wrong while getting retriever!');
   }
 }
